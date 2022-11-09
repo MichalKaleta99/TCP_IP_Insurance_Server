@@ -10,14 +10,27 @@ public class Client {
         try{
             Socket s = new Socket("localhost", 4999);
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+
             System.out.println("Please type user id: ");
-            Scanner id = new Scanner(System.in);
-            int x = id.nextInt();
-            System.out.println(x);
-            dos.write(x);
-            dos.flush();
-            dos.close();
-            s.close();
+            Scanner x = new Scanner(System.in);
+            int providedId = x.nextInt();
+
+            dos.write(providedId);
+
+
+            InputStream input = s.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+            char[] buffer = new char[1];
+
+            int charsRead = 0;
+
+            while ((charsRead = reader.read(buffer)) != -1) {
+                String message = new String(buffer).substring(0, charsRead);
+                System.out.print(message);
+            }
+
         }
         catch(Exception e){
             System.out.println(e);

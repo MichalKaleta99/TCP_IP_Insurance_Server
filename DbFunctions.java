@@ -2,10 +2,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DbFunctions {
+    int rowCounter = 0;
 
-    public ArrayList<UserInfo> getUserInfo() {
-        return ArrayList<userInfo> userInfo;
-    }
 
     ArrayList<UserInfo> userInfo = new ArrayList<UserInfo>();
     public Connection connectToDb(String dbname, String user, String pass) {
@@ -42,11 +40,10 @@ public class DbFunctions {
         }
     }
 
-    public int readUserData(Connection conn, int id) {
+    public ArrayList<UserInfo> readUserData(Connection conn, int id) {
         userInfo.clear();
         Statement statement;
         ResultSet result = null;
-        int rowCounter = 0;
         try {
             String query = String.format("SELECT nick, brand, model, insurer, price FROM users INNER JOIN vehicles ON users.login = vehicles.login INNER JOIN insurance_offers ON vehicles.id=insurance_offers.vehicle_id WHERE users.id= %d", id);
             statement = conn.createStatement();
@@ -61,13 +58,19 @@ public class DbFunctions {
             System.out.println(e);
             System.out.println("Selecting data failed because of: " + e);
         }
-        return rowCounter;
+        return userInfo;
     }
 
+
+    public int getRowCounter(){
+        return rowCounter;
+    }
     public void displayData(Connection conn, int id){
-        int insuranceCounter=readUserData(conn, id);
+        ArrayList<UserInfo> insuranceCounter=readUserData(conn, id);
         int i = 1;
-        System.out.println("User " + userInfo.get(0) + " (whose login id is " + id + ") has " + insuranceCounter + " insurances and here is full list of them:");
+
+        System.out.println(insuranceCounter);
+       /* System.out.println("User " + userInfo.get(0) + " (whose login id is " + id + ") has " + insuranceCounter + " insurances and here is full list of them:");
 
         for (UserInfo userInfo : userInfo) {
             System.out.println(i+".");
@@ -75,7 +78,7 @@ public class DbFunctions {
             System.out.println("Insurance company - "+userInfo.getInsurance());
             System.out.println("Cost of insurance - "+userInfo.getPrice()+" $");
             i++;
-        }
+        }*/
 
     }
 
