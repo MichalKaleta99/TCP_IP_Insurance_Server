@@ -65,21 +65,6 @@ public class DbFunctions {
     public int getRowCounter(){
         return rowCounter;
     }
-    public void displayData(Connection conn, int id){
-        ArrayList<UserInfo> insuranceCounter=readUserData(conn, id);
-        int i = 1;
 
-        System.out.println(insuranceCounter);
-       /* System.out.println("User " + userInfo.get(0) + " (whose login id is " + id + ") has " + insuranceCounter + " insurances and here is full list of them:");
-
-        for (UserInfo userInfo : userInfo) {
-            System.out.println(i+".");
-            System.out.println("Car - "+userInfo.getCarBrand()+" "+userInfo.getCarModel());
-            System.out.println("Insurance company - "+userInfo.getInsurance());
-            System.out.println("Cost of insurance - "+userInfo.getPrice()+" $");
-            i++;
-        }*/
-
-    }
 
 }
