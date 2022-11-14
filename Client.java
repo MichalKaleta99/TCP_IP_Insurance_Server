@@ -1,6 +1,7 @@
 import javax.xml.crypto.Data;
 import java.net.*;
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -8,7 +9,6 @@ public class Client {
     private static int id;
     private static Socket s;
     public static void main(String[] args) {
-
         if (establishConnection()!=null){
             id = askUserForId();
             askServer(s, id);
@@ -40,10 +40,22 @@ public class Client {
     }
 
     private static int askUserForId() {
-        System.out.println("Please type user id: ");
-        Scanner x = new Scanner(System.in);
-        int providedId = x.nextInt();
+        System.out.println("Please type user ID: ");
+        Scanner console = new Scanner(System.in);
 
+        if (console.hasNext("stop")) {
+            System.out.println("***Terminated***");
+            System.exit(0);
+        }
+        while(!console.hasNextInt()) {
+            System.out.println("Input is not a valid integer! Please type user ID again and remember to type int! ");
+            console.next();
+        }
+        int providedId = console.nextInt();
+        while(providedId<=0) {
+            System.out.println("User ID should be greater than 0! ");
+            providedId = console.nextInt();
+        }
         return providedId;
     }
 
@@ -64,7 +76,6 @@ public class Client {
         }
         catch(Exception e){
             System.out.println("Error when receiving data from client server because of"+e);
-
         }
     }
 

@@ -14,14 +14,12 @@ public class Server {
 
 
     public static void main(String[] args) {
-
         if (establishConnection()!=null){
             int id = readClientsResponse();
             connectToDb(id);
             createResponseToClient(id);
             sendResponseToClient();
         }
-
     }
 
     private static Socket establishConnection() {
@@ -50,7 +48,7 @@ public class Server {
 
     private static void connectToDb(int id){
         try{
-            Connection conn= db.connectToDb("mydb","postgres","admin");
+            Connection conn= db.connectToDb("testdb","postgres","admin");
 
             userInfo = db.readUserData(conn, id);
         }
@@ -61,13 +59,19 @@ public class Server {
 
     private static void createResponseToClient(int id){
         int i = 1;
-        response.append("User " + userInfo.get(0) + " (whose login id is " + id + ") has " + db.getRowCounter() + " insurances and here is full list of them:\n");
-        for (UserInfo info : userInfo) {
-            response.append((i+".\n"));
-            response.append("Car - "+info.getCarBrand()+" "+info.getCarModel()+"\n");
-            response.append("Insurance company - "+info.getInsurance()+"\n");
-            response.append("Cost of insurance - "+info.getPrice()+" $\n");
-            i++;
+        int numOfInsurances = db.getRowCounter();
+        if(numOfInsurances==0){
+            response.append("User with specified id - " + id +" does not exist or does not have any insurances.");
+        }
+        else {
+            response.append("User " + userInfo.get(0) + " (whose login id is " + id + ") has " + numOfInsurances + " insurances and here is full list of them:\n");
+            for (UserInfo info : userInfo) {
+                response.append((i + ".\n"));
+                response.append("Car - " + info.getCarBrand() + " " + info.getCarModel() + "\n");
+                response.append("Insurance company - " + info.getInsurance() + "\n");
+                response.append("Cost of insurance - " + info.getPrice() + " $\n");
+                i++;
+            }
         }
     }
 
@@ -76,7 +80,6 @@ public class Server {
             PrintWriter writer = new PrintWriter(s.getOutputStream());
             writer.println(response);
             writer.close();
-
         }
         catch (Exception e){
             System.out.println("Sending response to client failed because of "+e);
