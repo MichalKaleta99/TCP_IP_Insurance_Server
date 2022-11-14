@@ -9,6 +9,7 @@ After receiving the incoming message (the client sends the user's id, i.e. the d
 
 # Tech stack
 Java
+
 Pure JDBC to read data from the database - PostgreSQL. 
 
 # How to run?
