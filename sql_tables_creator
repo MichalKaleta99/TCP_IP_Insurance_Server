@@ -1,0 +1,22 @@
+CREATE TABLE users
+( id bigint CONSTRAINT users_pk PRIMARY KEY NOT null,
+  nick text NOT NULL,
+  login text CONSTRAINT users_login_unique UNIQUE NOT NULL,
+  password text NOT NULL,
+  insert_time timestamp NOT NULL DEFAULT now()
+);
+
+CREATE TABLE vehicles
+( id bigint CONSTRAINT vehicles_pk PRIMARY KEY NOT null,
+  login text CONSTRAINT vehicles_ref_users_fk REFERENCES public.users(login) NOT NULL,
+  brand text NOT NULL,
+  model text NOT NULL,
+  insert_time timestamp NOT NULL DEFAULT now()
+);
+CREATE TABLE insurance_offers
+( id bigint CONSTRAINT insurance_offers_pk PRIMARY KEY NOT null,
+  vehicle_id bigint CONSTRAINT insurance_offers_ref_vehicles_fk REFERENCES public.vehicles(id) NOT NULL,
+  insurer text NOT NULL,
+  price float NOT NULL,
+  insert_time timestamp NOT NULL DEFAULT now()
+);
